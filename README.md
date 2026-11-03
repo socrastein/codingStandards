@@ -3,6 +3,10 @@
 How Matt writes code, in every project: the standards themselves, the exemplars that show them, and the tools that check what
 a tool can check. Every project's CLAUDE.md, and Matt's global one, point here instead of keeping their own copy.
 
+- `codingStandards.md`: the standards. Matt's global CLAUDE.md imports it, so every Claude Code session on every project loads it.
+- `exemplars.md`: the standards shown on real code, before and after, collected from code reviews.
+- `measure/`: the function measuring tool for the code review gate (below).
+
 ## Measuring functions (the code review gate)
 
 `measure/` measures every function a change touches: lines of code (without blank lines and comments), SonarSource's cognitive
