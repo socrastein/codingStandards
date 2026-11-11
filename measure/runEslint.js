@@ -20,6 +20,34 @@ import { createFunctionRecorder, RECORDER_PLUGIN_NAME } from "./functionRecorder
  * @property {number} column The column, counted from 1 (ESLint's messages count columns from 1, its nodes from 0).
  */
 
+/**
+ * The rules that count unexplained knowledge: bare numbers and bitwise operators, each reported where it appears. They are a
+ * prompt for the readability pass, not a judgment, so they have no threshold.
+ *
+ * Numbers that need no name are left out: 0, 1, -1 and 2 (halving is self-evident), array indexes, default parameter values, numbers given a name by an
+ * object key (`{ radius: 6.2 }`), and TypeScript's numeric types, enums and readonly class fields. The TypeScript version of
+ * the rule handles plain JavaScript too, so one rule serves every kind of file.
+ */
+const COUNTING_RULES = {
+  "@typescript-eslint/no-magic-numbers": [
+    "warn",
+    {
+      ignore: [0, 1, -1, 2],
+      ignoreArrayIndexes: true,
+      ignoreDefaultValues: true,
+      detectObjects: false,
+      ignoreNumericLiteralTypes: true,
+      ignoreEnums: true,
+      ignoreReadonlyClassProperties: true,
+      ignoreTypeIndexes: true,
+    },
+  ],
+  "no-bitwise": "warn",
+};
+
+/** Test files, where literal expected values are the specification, so the counting rules leave them out. */
+const TEST_FILES = ["**/*.{test,spec}.{js,mjs,cjs,ts,mts}"];
+
 /** The measuring rules, each with a maximum of 0 so that every function gets a report. */
 const MEASURING_RULES = {
   "max-lines-per-function": ["warn", { max: 0, skipBlankLines: true, skipComments: true, IIFEs: true }],
@@ -46,7 +74,8 @@ export async function runEslint(projectRoot, files) {
 }
 
 /**
- * The flat ESLint config that measures: the rules for every kind of file, and the parser each kind needs.
+ * The flat ESLint config that measures: the rules for every kind of file, the counting rules for every file but tests, and
+ * the parser each kind needs.
  *
  * @param {object} recorderPlugin The function recorder's plugin.
  * @returns {object[]}
@@ -54,9 +83,10 @@ export async function runEslint(projectRoot, files) {
 function measuringConfig(recorderPlugin) {
   const recordRule = `${RECORDER_PLUGIN_NAME}/record`;
   const rules = { ...MEASURING_RULES, [recordRule]: "warn" };
-  const plugins = { sonarjs, [RECORDER_PLUGIN_NAME]: recorderPlugin };
+  const plugins = { sonarjs, "@typescript-eslint": tseslint.plugin, [RECORDER_PLUGIN_NAME]: recorderPlugin };
   return [
     { files: ["**/*.{js,mjs,cjs,ts,mts,vue}"], plugins, rules },
+    { files: ["**/*.{js,mjs,cjs,ts,mts,vue}"], ignores: TEST_FILES, rules: COUNTING_RULES },
     { files: ["**/*.{ts,mts}"], languageOptions: { parser: tseslint.parser } },
     { files: ["**/*.vue"], languageOptions: { parser: vueParser, parserOptions: { parser: tseslint.parser } } },
   ];

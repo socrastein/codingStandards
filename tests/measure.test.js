@@ -34,6 +34,17 @@ describe("measuring real files", () => {
     expect(functions.get("format")).toMatchObject({ lines: 1, cyclomatic: 1, params: 1 });
   });
 
+  it("counts bare numbers and bitwise operators, leaving out ignored numbers and ones a name explains", async () => {
+    const functions = await measuredFixture("magic.ts");
+    expect(functions.get("scale")).toMatchObject({ magic: 4 });
+    expect(functions.get("plain")).toMatchObject({ magic: 0 });
+  });
+
+  it("counts nothing in a test file, where literal expected values are the specification", async () => {
+    const functions = await measuredFixture("magic.test.ts");
+    expect(functions.get("expectDouble")).toMatchObject({ magic: 0 });
+  });
+
   it("measures a Vue component's <script setup>, naming callbacks after their calls", async () => {
     const functions = await measuredFixture("Component.vue");
     expect([...functions.keys()]).toEqual(["computed callback", "reduce callback"]);

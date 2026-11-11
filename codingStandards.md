@@ -101,7 +101,8 @@ Duplication is far cheaper than the wrong abstraction (Metz).
 
 `measure/` checks every function a change touches (see its README). Thresholds: 20 lines of code (no blanks/comments),
 cognitive complexity 10, nesting depth 2, 3 parameters. Over a threshold is not automatically wrong, but never silent: refactor
-or justify it in the commit proposal.
+or justify it in the commit proposal. Its `Magic` column (bare numbers and bitwise operators) has no threshold: it shows the
+readability pass where to look first.
 
 ## Code you touch
 

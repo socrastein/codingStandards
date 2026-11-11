@@ -24,6 +24,13 @@ The thresholds are in `measure/thresholds.js`: 20 lines, cognitive complexity 10
 one is not automatically wrong, but it is never let through silently: it is refactored, or its size is justified in the commit
 proposal. A test file's `describe` callbacks are left out, since they only group tests; the tests inside them are measured.
 
+The `Magic` column counts the bare numbers and bitwise operators in each function, the usual signs of knowledge the code
+doesn't explain (a protocol constant, `>>> 0`, a bit mask). It has no threshold: it points the readability pass at the
+functions to read most carefully, and a count is fine once each one is named or sourced. It leaves out 0, 1, -1 and 2, array
+indexes, default parameter values, numbers named by an object key (`{ radius: 6.2 }`), TypeScript's numeric types and
+enums, and test files, whose literal expected values are the specification. Numbers at a module's top level belong to no
+function and are not counted. It counts constants, not the bugs they can hide: only reading catches those.
+
 The measures come from ESLint's own rules and `eslint-plugin-sonarjs`, each set to a maximum of 0 so it reports a value for
 every function, which `measure/` matches to the function it is about. The project's own ESLint config, if it has one, is not
 used. First use on a machine: `npm install` in this repo.
@@ -38,8 +45,6 @@ Standards that a tool could check, so the prose can drop them (roughly in order 
   approximate (it cannot tell `value.trim()` from real work), so a warning that prompts a look.
 - **Booleans read as predicates**: `@typescript-eslint/naming-convention` (`is`, `has`, `can`, `should`).
 - **No cryptic abbreviations**: CSpell over identifiers, with the abbreviation whitelist as its dictionary.
-- **Unsourced outside knowledge**: a magic-number column in `measure/` (`no-magic-numbers`, ignoring 0, 1 and -1, plus
-  `no-bitwise`), counted per function, as a prompt for the readability pass. It catches bare constants, not the bugs they hide.
 - **JSDoc on every export**: `eslint-plugin-jsdoc` (`@param` and `@returns` present; whether they say something stays judgment).
 - **TypeScript rules**: `typescript-eslint` (no `any`, explicit return types on exports, `import type`, no `enum`, `!` warned).
 - **Dependency direction**: `dependency-cruiser`, for a project with layers (liftingApp's `types ← factories ← validate/derive ← UI`).

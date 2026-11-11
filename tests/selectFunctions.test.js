@@ -15,6 +15,7 @@ const functionOn = (/** @type {string} */ name, /** @type {number} */ firstLine,
   cyclomatic: 0,
   depth: 0,
   params: 0,
+  magic: 0,
 });
 
 describe("touchedFunctions", () => {

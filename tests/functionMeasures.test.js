@@ -57,11 +57,22 @@ describe("measureFunctions", () => {
     expect(outer?.depth).toBe(1);
   });
 
+  it("counts each magic number and bitwise report toward the innermost function around it", () => {
+    const messages = [
+      report("@typescript-eslint/no-magic-numbers", "No magic number: 42.", { line: 2, column: 5 }),
+      report("@typescript-eslint/no-magic-numbers", "No magic number: 7.", { line: 6, column: 9 }),
+      report("no-bitwise", "Unexpected use of '&'.", { line: 8, column: 9 }),
+    ];
+    const [outer, callback] = measureFunctions(RECORDS, messages);
+    expect(outer?.magic).toBe(1);
+    expect(callback?.magic).toBe(2);
+  });
+
   it("leaves out reports from rules that do not measure, and from other files", () => {
     const otherFile = { ...report("complexity", "has a complexity of 9.", { line: 1, column: 1 }), file: "/b.js" };
     const messages = [report("no-unused-vars", "'x' is unused.", { line: 1, column: 1 }), otherFile];
     const [outer] = measureFunctions(RECORDS, messages);
-    expect(outer).toMatchObject({ lines: 0, cognitive: 0, cyclomatic: 0, depth: 0, params: 0 });
+    expect(outer).toMatchObject({ lines: 0, cognitive: 0, cyclomatic: 0, depth: 0, params: 0, magic: 0 });
   });
 
   it("stops when a measuring report's text has no value, rather than reading it as 0", () => {

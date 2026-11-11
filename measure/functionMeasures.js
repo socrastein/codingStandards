@@ -1,7 +1,8 @@
 /**
  * Puts ESLint's measuring reports together into one row per function: each report is matched to the function it is about,
  * and its value read out of the rule's text. A function's own measures are reported at its head (between its start and its
- * body); a nesting depth is reported at the nested block, so it belongs to the innermost function around that block.
+ * body); a nesting depth is reported at the nested block, and each magic number or bitwise operator where it appears, so
+ * those belong to the innermost function around them.
  */
 
 /** @typedef {import("./functionRecorder.js").FunctionRecord} FunctionRecord */
@@ -17,6 +18,7 @@
  * @property {number} cyclomatic Its cyclomatic complexity.
  * @property {number} depth The deepest nesting of blocks in it (0 for none).
  * @property {number} params How many parameters it takes.
+ * @property {number} magic How many bare numbers and bitwise operators it uses: a prompt for the readability pass.
  */
 
 /** @typedef {"lines" | "cognitive" | "cyclomatic" | "params"} HeadMeasure The measures ESLint reports at a function's head. */
@@ -28,6 +30,9 @@ const HEAD_RULES = /** @type {const} */ ({
   complexity: { measure: "cyclomatic", pattern: /complexity of (\d+)/ },
   "max-params": { measure: "params", pattern: /too many parameters \((\d+)\)/ },
 });
+
+/** The rules whose every report counts once toward the Magic count of the function it appears in. */
+const MAGIC_RULES = ["@typescript-eslint/no-magic-numbers", "no-bitwise"];
 
 /** How to read the depth out of max-depth's text. */
 const DEPTH_PATTERN = /nested too deeply \((\d+)\)/;
@@ -41,7 +46,7 @@ const DEPTH_PATTERN = /nested too deeply \((\d+)\)/;
  * @returns {FunctionMeasures[]}
  */
 export function measureFunctions(records, messages) {
-  const rows = records.map((record) => ({ record, lines: 0, cognitive: 0, cyclomatic: 0, depth: 0, params: 0 }));
+  const rows = records.map((record) => ({ record, lines: 0, cognitive: 0, cyclomatic: 0, depth: 0, params: 0, magic: 0 }));
   for (const message of messages) {
     addMessage(rows, message);
   }
@@ -57,8 +62,22 @@ export function measureFunctions(records, messages) {
 function addMessage(rows, message) {
   const sameFileRows = rows.filter((row) => row.record.file === message.file);
   const isDepthReport = message.ruleId === "max-depth";
+  const isMagicReport = MAGIC_RULES.includes(message.ruleId);
   if (isDepthReport) addDepth(sameFileRows, message);
+  else if (isMagicReport) addMagic(sameFileRows, message);
   else addHeadMeasure(sameFileRows, message);
+}
+
+/**
+ * Counts one magic number or bitwise operator toward the innermost function around it. One outside every function (at the
+ * module's top level) belongs to no row and is left out.
+ *
+ * @param {FunctionMeasures[]} rows The functions of the report's file.
+ * @param {MeasureMessage} message A no-magic-numbers or no-bitwise report, made where the number or operator is.
+ */
+function addMagic(rows, message) {
+  const row = innermostAround(rows, positionOf(message));
+  if (row) row.magic += 1;
 }
 
 /**

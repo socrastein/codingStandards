@@ -18,6 +18,7 @@ const COLUMNS = [
   { heading: "Cyclomatic", cell: (/** @type {Row} */ row) => String(row.cyclomatic) },
   { heading: "Depth", cell: (/** @type {Row} */ row) => measureCell(row, "depth") },
   { heading: "Params", cell: (/** @type {Row} */ row) => measureCell(row, "params") },
+  { heading: "Magic", cell: (/** @type {Row} */ row) => String(row.magic) },
 ];
 
 /** @typedef {FunctionMeasures & { where: string }} Row A function's measures with its place written for the table. */
@@ -107,7 +108,8 @@ function summaryLine(rows) {
   const overCount = rows.filter(isOverAnyThreshold).length;
   const thresholds = Object.entries(THRESHOLDS).map(([name, value]) => `${name} ${value}`);
   const counts = `${rows.length} function(s), ${overCount} over a threshold`;
-  return `${counts} (thresholds: ${thresholds.join(", ")}; "!" marks a value over its threshold).`;
+  const legend = `"!" marks a value over its threshold; Magic counts bare numbers and bitwise operators, for the readability pass`;
+  return `${counts} (thresholds: ${thresholds.join(", ")}; ${legend}).`;
 }
 
 /**
