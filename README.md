@@ -38,6 +38,8 @@ Standards that a tool could check, so the prose can drop them (roughly in order 
   approximate (it cannot tell `value.trim()` from real work), so a warning that prompts a look.
 - **Booleans read as predicates**: `@typescript-eslint/naming-convention` (`is`, `has`, `can`, `should`).
 - **No cryptic abbreviations**: CSpell over identifiers, with the abbreviation whitelist as its dictionary.
+- **Unsourced outside knowledge**: a magic-number column in `measure/` (`no-magic-numbers`, ignoring 0, 1 and -1, plus
+  `no-bitwise`), counted per function, as a prompt for the readability pass. It catches bare constants, not the bugs they hide.
 - **JSDoc on every export**: `eslint-plugin-jsdoc` (`@param` and `@returns` present; whether they say something stays judgment).
 - **TypeScript rules**: `typescript-eslint` (no `any`, explicit return types on exports, `import type`, no `enum`, `!` warned).
 - **Dependency direction**: `dependency-cruiser`, for a project with layers (liftingApp's `types ← factories ← validate/derive ← UI`).

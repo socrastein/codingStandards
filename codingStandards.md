@@ -62,6 +62,8 @@ the steps are not named at the right level.** It catches, among others:
 - Prefer the spelled-out form whenever the short one requires the reader to know something.
 - No hidden behavior: if the name and JSDoc don't tell what it does, that is a design bug.
 - Spell out defaults and edge cases. Magic numbers become named constants with a comment on their source.
+- Outside knowledge gets a name and a source. A constant, idiom or algorithm the reader can't work out from the code (a protocol
+  constant, `>>> 0`, bit masks, a published algorithm) is named, and its comment says where it comes from.
 
 ## Duplication
 
@@ -92,6 +94,8 @@ Duplication is far cheaper than the wrong abstraction (Metz).
 
 - Every public function has tests; `describe`/`it` read as specifications.
 - Pin down the why and the edge cases, not only the happy path. Refactor only under a passing suite.
+- Test a documented bound at the bound itself, constructing the input that reaches it. Sampling random inputs does not test a
+  bound.
 
 ## Measured
 
