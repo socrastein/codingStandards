@@ -3,8 +3,8 @@
 Matt's coding standards for every project, the exemplars that show them, and the tools that check them. What it holds and how
 the tools are used is in `README.md`; read it first.
 
-General workflow, commit style and comment style come from the global CLAUDE.md. This file only covers what is specific to this
-repo.
+General workflow comes from the global CLAUDE.md; commit and comment style from codingStandards.md. This file only covers
+what is specific to this repo.
 
 ## Commands
 
