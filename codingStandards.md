@@ -108,6 +108,16 @@ Other languages get a formatter only when Matt asks.
   descriptions, quotes) is never LLM text: drafts are marked placeholders (liftingApp: `placeholderCopy()`; elsewhere an
   equivalent marker), never unmarked until he rewrites them. Interface text (labels, hints, errors, empty states,
   how-a-tool-works explanations) is written directly.
+- **Labels in Title Case**: buttons, menu items, switches, field labels, legends and headings ("Add Client", "Delete Set",
+  "Sign In with Google"; short words like a, and, of, to, with stay lower case mid-label). Sentences stay sentence case:
+  hints, errors, confirm questions, tooltips, status lines, and the choices inside a drop-down or radio group.
+
+## Interface controls
+
+Every project, private tools included.
+
+- **On/off settings are switches, never a lone checkbox.** Checkboxes are for choosing several from a list (weeks,
+  muscles), where each is one of a set.
 
 ## Public-facing sites and apps
 
