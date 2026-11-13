@@ -107,7 +107,8 @@ Other languages get a formatter only when Matt asks.
 - **Matt's writing is his.** Prose people would expect him to have written personally (blog posts, about page, service
   descriptions, quotes) is never LLM text: drafts are marked placeholders (liftingApp: `placeholderCopy()`; elsewhere an
   equivalent marker), never unmarked until he rewrites them. Interface text (labels, hints, errors, empty states,
-  how-a-tool-works explanations) is written directly.
+  how-a-tool-works explanations) is written directly. Small spelling and grammar corrections to his prose are fine
+  without asking; list each one in the report so he can confirm it.
 - **Labels in Title Case**: buttons, menu items, switches, field labels, legends and headings ("Add Client", "Delete Set",
   "Sign In with Google"; short words like a, and, of, to, with stay lower case mid-label). Sentences stay sentence case:
   hints, errors, confirm questions, tooltips, status lines, and the choices inside a drop-down or radio group.
