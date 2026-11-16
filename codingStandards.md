@@ -125,6 +125,12 @@ Every project, private tools included.
   Sub-sections inside a card use the library's layering (inner cards or panels), never just a heading over more loose text.
   A card of text has padding. Check a screenshot at phone and desktop width: if a paragraph, list or table touches the page
   background, it needs a card.
+- **Destructive actions always ask first, in two colours.** A button that starts something that deletes, removes, signs out
+  or otherwise ends something wears the library's warning style (orange) and opens a confirmation. The confirmation's button
+  wears the danger style (red) and is the only place red appears on a button. A confirmation of something harmless (send,
+  copy, apply) uses the primary style. One exception to asking: removing something inside a form that is not saved yet,
+  which Cancel would discard anyway, is one click, and still wears the warning style. The label carries the meaning; colour
+  is never the only cue.
 
 ## Public-facing sites and apps
 
