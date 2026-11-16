@@ -119,6 +119,12 @@ Every project, private tools included.
 
 - **On/off settings are switches, never a lone checkbox.** Checkboxes are for choosing several from a list (weeks,
   muscles), where each is one of a set.
+- **Content sits on cards, never loose on the page background.** A page is a column of cards: every block of content (a
+  section of prose, a form, a list, a table, a set of facts) sits on a card or the library's equivalent raised surface. Only
+  the page title, one line of intro or status under it, and standalone actions or links sit directly on the background.
+  Sub-sections inside a card use the library's layering (inner cards or panels), never just a heading over more loose text.
+  A card of text has padding. Check a screenshot at phone and desktop width: if a paragraph, list or table touches the page
+  background, it needs a card.
 
 ## Public-facing sites and apps
 
