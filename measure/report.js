@@ -124,13 +124,14 @@ function isOverAnyThreshold(row) {
 }
 
 /**
- * The order of the table: the most cognitively complex first, and of equal ones the longest.
+ * The order of the report: the most cognitively complex first, and of equal ones the longest. The table and the JSON
+ * report both sort by it.
  *
- * @param {Row} first
- * @param {Row} second
+ * @param {FunctionMeasures} first
+ * @param {FunctionMeasures} second
  * @returns {number}
  */
-function hardestFirst(first, second) {
+export function hardestFirst(first, second) {
   const byCognitive = second.cognitive - first.cognitive;
   return byCognitive !== 0 ? byCognitive : second.lines - first.lines;
 }

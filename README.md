@@ -18,7 +18,14 @@ node ~/repos/codingStandards/measure/measure.js                 # the uncommitte
 node ~/repos/codingStandards/measure/measure.js --base main     # everything the branch changed since it left main
 node ~/repos/codingStandards/measure/measure.js src/a.ts        # every function in the named files
 node ~/repos/codingStandards/measure/measure.js --all           # every function in every tracked source file
+node ~/repos/codingStandards/measure/measure.js --json --all    # the measures as one JSON document, for a tool to read
 ```
+
+With `--json`, the output is an array with one object per measured function, in the table's order (hardest first). Each object
+holds the function's name, its file relative to the repository root, and where it starts and ends (`startLine` and `endLine` are
+1-based lines, `startColumn` and `endColumn` 0-based columns, so a tool can match the function it located itself), its measures
+(`linesOfCode`, `cognitiveComplexity`, `cyclomaticComplexity`, `nestingDepth`, `parameterCount`, `magicCount`), and `overThreshold`,
+the measures that are over their thresholds. An empty array means there was nothing to measure.
 
 The thresholds are in `measure/thresholds.js`: 20 lines, cognitive complexity 10, nesting depth 2, 3 parameters. A value over
 one is not automatically wrong, but it is never let through silently: it is refactored, or its size is justified in the commit

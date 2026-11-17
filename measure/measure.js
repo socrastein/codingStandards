@@ -8,12 +8,15 @@
  *   node ~/repos/codingStandards/measure/measure.js src/a.ts …      every function in the given files
  *   node ~/repos/codingStandards/measure/measure.js --all           every function in every tracked source file
  *
+ * Add --json to print the measures as one JSON document instead of the table, so another tool can read them.
+ *
  * It always exits 0: the numbers are information for the review, not a pass or fail.
  */
 
 import { execFileSync } from "node:child_process";
 import { resolve } from "node:path";
 import { changedLinesSince, isSourceFile } from "./changedLines.js";
+import { formatJsonReport } from "./jsonReport.js";
 import { measureFunctions } from "./functionMeasures.js";
 import { formatReport } from "./report.js";
 import { runEslint } from "./runEslint.js";
@@ -24,6 +27,7 @@ import { touchedFunctions } from "./selectFunctions.js";
  * @typedef {object} Options
  * @property {string} base The commit the changes are measured from ("HEAD" unless --base says otherwise).
  * @property {boolean} all Whether to measure every tracked source file whole.
+ * @property {boolean} json Whether to print the measures as a JSON document instead of the table.
  * @property {string[]} paths Files named on the command line, to measure whole.
  */
 
@@ -34,7 +38,8 @@ const files = [...changes.keys()];
 const { records, messages } = await runEslint(projectRoot, files);
 const measures = measureFunctions(records, messages);
 const touched = touchedFunctions(measures, changes);
-console.log(formatReport(touched, projectRoot));
+const report = options.json ? formatJsonReport(touched, projectRoot) : formatReport(touched, projectRoot);
+console.log(report);
 
 /**
  * The options given on the command line.
@@ -44,10 +49,11 @@ console.log(formatReport(touched, projectRoot));
  */
 function parseArguments(args) {
   /** @type {Options} */
-  const parsed = { base: "HEAD", all: false, paths: [] };
+  const parsed = { base: "HEAD", all: false, json: false, paths: [] };
   for (let index = 0; index < args.length; index++) {
     const arg = /** @type {string} */ (args[index]);
     if (arg === "--all") parsed.all = true;
+    else if (arg === "--json") parsed.json = true;
     else if (arg === "--base") parsed.base = args[++index] ?? "HEAD";
     else if (arg.startsWith("--")) throw new Error(`unknown option: ${arg}`);
     else parsed.paths.push(arg);
