@@ -61,6 +61,26 @@ the steps are not named at the right level.** It catches, among others:
 - **Outside knowledge gets a name and a source.** Magic numbers, protocol constants, idioms (`>>> 0`, bit masks) and published
   algorithms become named constants or helpers whose comment says where they come from.
 
+## Failing loudly
+
+**A failure nobody sees is worse than a crash.** Design so that when something goes wrong, the code says so, close to
+where it went wrong, in words that say what to do.
+
+- **Never swallow an error.** No empty `catch`, and no `catch` that only logs and carries on as if it had worked. Catch
+  what you can handle; let the rest travel.
+- **No silent fallback.** A missing setting, an unknown value or a failed lookup is an error, not a reason to quietly use
+  a default. A default that exists on purpose is spelled out and commented.
+- **Check at the boundary.** Validate input where it enters (a form, a file, a request, an argument) and refuse it there
+  with a message naming the field and the rule, instead of failing three calls deeper.
+- **Anything that waits has a limit.** A request, a subprocess, a lock, a poll: each has a timeout, and reaching it is
+  reported as a failure.
+- **Silence is not success.** A check that could not run says it did not run. A script reports what it did and exits
+  non-zero when it did not do it.
+- **Staying up is not the same as hiding it.** A service may log, retry and keep serving, but the failure must surface
+  where someone will look: a status field, an alert, a non-zero exit.
+- **Prefer designs with fewer ways to fail** (Ousterhout: define errors out of existence). Fewer cases, each one loud.
+- **Test the failure path:** the refused input, the timeout, the missing file, and the message each one gives.
+
 ## Duplication
 
 Duplication is far cheaper than the wrong abstraction (Metz).
@@ -176,4 +196,4 @@ A change with no code says so and skips the review.
 ## Sources
 
 Ousterhout, _A Philosophy of Software Design_; Fowler, _Refactoring_; Metz, _Practical Object-Oriented Design_ and "The Wrong
-Abstraction"; Martin, _Clean Code_; _The Zen of Python_.
+Abstraction"; Martin, _Clean Code_; Hunt and Thomas, _The Pragmatic Programmer_; Shore, "Fail Fast"; _The Zen of Python_.

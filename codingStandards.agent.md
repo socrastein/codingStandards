@@ -33,6 +33,12 @@ letters except loop counters. Booleans are predicates (`isReady`, `hasFailed`). 
 - Spell out defaults and edge cases.
 - Leave look-alike code separate unless it is obviously one concept. No abstraction for hypothetical reuse.
 
+## Failing loudly
+
+Never swallow an error or fall back silently: a failure is reported where it happens, with what to do. Validate input
+at the boundary. Anything that waits (a request, a subprocess, a test run) has a time limit. A check that could not run
+says so. Test the failure paths.
+
 ## TypeScript
 
 No `any` (use `unknown`, then narrow). No `enum`. Discriminated unions for several kinds of a thing. Exported functions
