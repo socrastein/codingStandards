@@ -10,7 +10,7 @@
  *
  * Add --json to print the measures as one JSON document instead of the table, so another tool can read them.
  *
- * It always exits 0: the numbers are information for the review, not a pass or fail.
+ * The numbers never fail the run: a bad command line or a git command that cannot run does, with an error naming the problem.
  */
 
 import { execFileSync } from "node:child_process";
@@ -23,6 +23,12 @@ import { runEslint } from "./runEslint.js";
 import { touchedFunctions } from "./selectFunctions.js";
 
 /**
+ * How long one git command may run before the tool gives up on it. git answers in milliseconds here, so a command still
+ * running after 30 seconds is hung (a lock file, a stuck credential prompt), and reporting that beats waiting forever.
+ */
+const GIT_TIMEOUT_MS = 30_000;
+
+/**
  * What to measure, from the command line.
  * @typedef {object} Options
  * @property {string} base The commit the changes are measured from ("HEAD" unless --base says otherwise).
@@ -31,6 +37,7 @@ import { touchedFunctions } from "./selectFunctions.js";
  * @property {string[]} paths Files named on the command line, to measure whole.
  */
 
+// argv holds node's path and this script's path before the user's arguments, so the first two are skipped.
 const options = parseArguments(process.argv.slice(2));
 const projectRoot = gitOutput(process.cwd(), ["rev-parse", "--show-toplevel"]);
 const changes = changesToMeasure(projectRoot, options);
@@ -54,11 +61,26 @@ function parseArguments(args) {
     const arg = /** @type {string} */ (args[index]);
     if (arg === "--all") parsed.all = true;
     else if (arg === "--json") parsed.json = true;
-    else if (arg === "--base") parsed.base = args[++index] ?? "HEAD";
+    else if (arg === "--base") parsed.base = requireValueAfter(args, ++index, arg);
     else if (arg.startsWith("--")) throw new Error(`unknown option: ${arg}`);
     else parsed.paths.push(arg);
   }
   return parsed;
+}
+
+/**
+ * The value of an option that takes one, which must be the next argument. Without it the tool stops, rather than quietly
+ * measuring against a default the user did not ask for.
+ *
+ * @param {string[]} args The arguments after the script's name.
+ * @param {number} valueIndex Where the value should be.
+ * @param {string} option The option that needs it, for the message.
+ * @returns {string} The value.
+ */
+function requireValueAfter(args, valueIndex, option) {
+  const value = args[valueIndex];
+  if (value === undefined) throw new Error(`${option} needs a value, such as ${option} main`);
+  return value;
 }
 
 /**
@@ -70,8 +92,8 @@ function parseArguments(args) {
  * @returns {import("./changedLines.js").ChangedLines}
  */
 function changesToMeasure(projectRoot, options) {
-  const namesFiles = options.paths.length > 0;
-  if (namesFiles) {
+  const hasNamedFiles = options.paths.length > 0;
+  if (hasNamedFiles) {
     const namedFiles = options.paths.map((path) => resolve(path));
     return wholeFiles(namedFiles);
   }
@@ -96,10 +118,10 @@ function trackedSourceFiles(projectRoot) {
 }
 
 /**
- * Files to measure from top to bottom.
+ * Each file measured whole: every function in it counts, as if every line had changed.
  *
  * @param {string[]} paths The files' absolute paths.
- * @returns {import("./changedLines.js").ChangedLines}
+ * @returns {import("./changedLines.js").ChangedLines} Each path mapped to "all".
  */
 function wholeFiles(paths) {
   /** @type {import("./changedLines.js").ChangedLines} */
@@ -116,5 +138,5 @@ function wholeFiles(paths) {
  * @returns {string}
  */
 function gitOutput(folder, args) {
-  return execFileSync("git", ["-C", folder, ...args], { encoding: "utf8" }).trim();
+  return execFileSync("git", ["-C", folder, ...args], { encoding: "utf8", timeout: GIT_TIMEOUT_MS }).trim();
 }

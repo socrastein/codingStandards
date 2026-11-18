@@ -1,13 +1,21 @@
+/**
+ * The measures as a table for the terminal (and for a commit proposal): one row per function, the hardest to read first, with
+ * every value over its threshold marked with "!", and a closing line that counts them. The JSON report in jsonReport.js
+ * sorts the same way.
+ */
+
 import { relative } from "node:path";
 import { THRESHOLDS } from "./thresholds.js";
 
-/**
- * The measures as a table for the terminal (and for a commit proposal): one row per function, the hardest to read first, with
- * every value over its threshold marked with "!", and a closing line that counts them.
- */
-
 /** @typedef {import("./functionMeasures.js").FunctionMeasures} FunctionMeasures */
 /** @typedef {import("./thresholds.js").ThresholdName} ThresholdName */
+/** @typedef {FunctionMeasures & { where: string }} Row A function's measures with its place written for the table. */
+
+/**
+ * How many leading columns hold text (the function's name and its place). They are left-aligned; the rest are numbers,
+ * which are right-aligned so their digits line up.
+ */
+const TEXT_COLUMN_COUNT = 2;
 
 /** The table's columns, in order: the heading, and how to get each cell from a row. */
 const COLUMNS = [
@@ -20,8 +28,6 @@ const COLUMNS = [
   { heading: "Params", cell: (/** @type {Row} */ row) => measureCell(row, "params") },
   { heading: "Magic", cell: (/** @type {Row} */ row) => String(row.magic) },
 ];
-
-/** @typedef {FunctionMeasures & { where: string }} Row A function's measures with its place written for the table. */
 
 /**
  * The report for a set of measured functions.
@@ -79,7 +85,7 @@ function columnWidths(headings, cells) {
 function alignedLine(cellRow, widths) {
   const padded = cellRow.map((cell, index) => {
     const width = widths[index] ?? 0;
-    const isTextColumn = index < 2;
+    const isTextColumn = index < TEXT_COLUMN_COUNT;
     return isTextColumn ? cell.padEnd(width) : cell.padStart(width);
   });
   return padded.join("  ").trimEnd();
@@ -127,9 +133,9 @@ function isOverAnyThreshold(row) {
  * The order of the report: the most cognitively complex first, and of equal ones the longest. The table and the JSON
  * report both sort by it.
  *
- * @param {FunctionMeasures} first
- * @param {FunctionMeasures} second
- * @returns {number}
+ * @param {FunctionMeasures} first The function that would come first.
+ * @param {FunctionMeasures} second The function that would come second.
+ * @returns {number} Negative when the first comes before the second, positive when after, zero when they tie on both measures.
  */
 export function hardestFirst(first, second) {
   const byCognitive = second.cognitive - first.cognitive;
