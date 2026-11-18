@@ -130,8 +130,9 @@ Other languages get a formatter only when Matt asks.
   how-a-tool-works explanations) is written directly. Small spelling and grammar corrections to his prose are fine
   without asking; list each one in the report so he can confirm it.
 - **Labels in Title Case**: buttons, menu items, switches, field labels, legends and headings ("Add Client", "Delete Set",
-  "Sign In with Google"; short words like a, and, of, to, with stay lower case mid-label). Sentences stay sentence case:
-  hints, errors, confirm questions, tooltips, status lines, and the choices inside a drop-down or radio group.
+  "Sign In with Google"; short words like a, and, of, to, with stay lower case mid-label; a unit in brackets keeps its own
+  case: "Work (sec)", "Weight (kg)"). Sentences stay sentence case: hints, errors, confirm questions, tooltips, status
+  lines, and the choices inside a drop-down or radio group.
 
 ## Interface controls
 

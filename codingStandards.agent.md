@@ -52,7 +52,8 @@ Refactor only under a passing suite.
 ## Writing
 
 - Only the plain hyphen (-): never en or em dashes, in code, comments, docs or commits.
-- Labels in Title Case ("Add Client"); sentences (hints, errors, tooltips) in sentence case.
+- Labels in Title Case ("Add Client"), except a unit in brackets ("Work (sec)"); sentences (hints, errors, tooltips) in
+  sentence case.
 - Never write prose that speaks for Matt (blog posts, about page, service descriptions). Mark any draft as a placeholder.
 
 ## Interface
