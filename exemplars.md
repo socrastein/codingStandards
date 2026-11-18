@@ -140,3 +140,62 @@ function columnWidths(headings, cells) {
   });
 }
 ```
+
+## A true name, a comment on the condition, a plain switch
+
+**Shows:** naming (a name must be true in its context); the readability test (a condition whose meaning isn't plain,
+cleverness); plain numbers.
+**From:** liftingApp `src/formatText.ts`, `ordinal`, rewritten by Matt (2026-11-18), in liftingApp's own style.
+
+Before: `isTeen` is false for 14 to 19, which are teens too, so the name misleads. Five constants name numbers that are
+plain on their own line, and the suffixes hide in a lookup object with a `??` fallback.
+
+<!-- prettier-ignore -->
+```ts
+const TEN = 10
+const HUNDRED = 100
+const FIRST_TEEN = 11
+const LAST_TEEN = 13
+const SUFFIX_BY_LAST_DIGIT: Record<number, string> = { 1: 'st', 2: 'nd', 3: 'rd' }
+
+export function ordinal(position: number): string {
+  const lastTwoDigits = position % HUNDRED
+  const isTeen = lastTwoDigits >= FIRST_TEEN && lastTwoDigits <= LAST_TEEN
+  if (isTeen) return `${position}th`
+  const suffix = SUFFIX_BY_LAST_DIGIT[position % TEN] ?? 'th'
+  return `${position}${suffix}`
+}
+```
+
+After: the exceptions get a comment instead of a wrong name, the numbers are written plainly, and the suffix rule is a
+switch that reads straight down, each `case` one short assignment.
+
+<!-- prettier-ignore -->
+```ts
+export function ordinal(position: number): string {
+  const lastTwoDigits = position % 100
+
+  // These are exceptions to the suffix rules below
+  if (lastTwoDigits >= 11 && lastTwoDigits <= 13) {
+    return `${position}th`
+  }
+
+  let suffix: string
+
+  switch (position % 10) {
+    case 1:
+      suffix = 'st'
+      break
+    case 2:
+      suffix = 'nd'
+      break
+    case 3:
+      suffix = 'rd'
+      break
+    default:
+      suffix = 'th'
+  }
+
+  return `${position}${suffix}`
+}
+```
