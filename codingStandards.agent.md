@@ -77,6 +77,8 @@ Refactor only under a passing suite.
 ## Interface
 
 - On/off settings are switches. Content sits on cards, never loose on the page background.
+- A search bar is the library's `SearchCard`: on a card, "Showing X of Y things" at its top, then the bar with a magnifying
+  glass, "Search" placeholder, no visible label, and an x on the right to clear it.
 - A destructive action wears the warning style and asks first; only the confirmation's button is the danger style.
 - Public pages: WCAG 2.2 AA, theme tokens only, never hard-coded colours.
 

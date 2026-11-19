@@ -170,6 +170,9 @@ Every project, private tools included.
   Sub-sections inside a card use the library's layering (inner cards or panels), never just a heading over more loose text.
   A card of text has padding. Check a screenshot at phone and desktop width: if a paragraph, list or table touches the page
   background, it needs a card.
+- **A search bar is the library's search card** (`SearchCard`), as on the Study Catalog: on a card, "Showing 12 of 66
+  studies" at its top, then the bar with a magnifying glass inside it, "Search" as the placeholder (or what it searches,
+  "Search by name, muscle group, or movement"), no visible label, and an x on its right that clears it.
 - **Destructive actions always ask first, in two colours.** A button that starts something that deletes, removes, signs out
   or otherwise ends something wears the library's warning style (orange) and opens a confirmation. The confirmation's button
   wears the danger style (red) and is the only place red appears on a button. A confirmation of something harmless (send,
