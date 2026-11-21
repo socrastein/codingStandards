@@ -6,6 +6,8 @@ a tool can check. Every project's CLAUDE.md, and Matt's global one, point here i
 - `codingStandards.md`: the standards. Matt's global CLAUDE.md imports it, so every Claude Code session on every project loads it.
 - `exemplars.md`: the standards shown on real code, before and after, collected from code reviews.
 - `measure/`: the function measuring tool for the code review gate (below).
+- `documentation/`: outside reference sources (security, architecture, user experience) and faithful condensed maps of
+  them, cited by the standards. Its `AGENTS.md` says how to read and add to it.
 
 ## Measuring functions (the code review gate)
 
