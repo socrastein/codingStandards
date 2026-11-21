@@ -1,0 +1,17 @@
+# Security sources
+
+The outside sources kept here, newest edition of each. How to use and add to this folder: `../AGENTS.md`.
+
+| File                                                    | Source                                                                                                                                                           | Edition, date                                                                                       | Licence            | Retrieved  | Condensed map                                             |
+| ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------ | ---------- | --------------------------------------------------------- |
+| `OWASP-ASVS-5.0.0-en.pdf`, `OWASP-ASVS-5.0.0-en.csv`    | OWASP Application Security Verification Standard, https://github.com/OWASP/ASVS/releases                                                                         | 5.0.0, May 2025 (release `v5.0.0_release`); the CSV lists every requirement                         | CC BY-SA 4.0       | 2026-11-21 | none yet                                                  |
+| `NIST-SP-800-63B-4.pdf`                                 | NIST SP 800-63B-4, Digital Identity Guidelines: Authentication and Authenticator Management, https://doi.org/10.6028/NIST.SP.800-63B-4                           | Revision 4, July 2025                                                                               | US government work | 2026-11-21 | none yet                                                  |
+| `OWASP-Top-10-for-LLM-Applications-2026.pdf`            | OWASP GenAI Security Project, https://genai.owasp.org/resource/owasp-genai-llm-top-10-2026/                                                                      | Version 2026, dated August 4, 2026 (its title page also still reads "[Publication date to be set]") | CC BY-SA 4.0       | 2026-11-21 | none yet                                                  |
+| `OWASP-Top-10-for-Agentic-Applications-2026-12.6-1.pdf` | OWASP GenAI Security Project, https://genai.owasp.org/resource/owasp-top-10-for-agentic-applications-for-2026/                                                   | Version 2026, December 2025                                                                         | CC BY-SA 4.0       | 2026-11-21 | `OWASP-Top-10-for-Agentic-Applications-2026-condensed.md` |
+| `OWASP-Securing-Agentic-Applications-V2.pdf`            | OWASP GenAI Security Project, Securing Agentic Applications V2: A Builder & Defender's Guide, https://genai.owasp.org/resource/securing-agentic-applications-v2/ | Version 2.0, October 2026 (posted November 10, 2026)                                                | CC BY-SA 4.0       | 2026-11-21 | none yet                                                  |
+
+Living web sources cited but not stored (they change too often for a copy to stay true; cite the date read):
+
+- OWASP Top 10:2025, https://top10.owasp.org/2025/
+- OWASP Cheat Sheet Series, https://cheatsheetseries.owasp.org/ (including the Passkey Security and Secure Coding with AI sheets)
+- OWASP API Security Top 10 2023, https://api-security.owasp.org/
